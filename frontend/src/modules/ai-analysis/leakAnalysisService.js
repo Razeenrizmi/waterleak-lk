@@ -5,7 +5,7 @@ import { AI_SYSTEM_PROMPT } from './aiPrompts';
  */
 export function runLocalFallbackEngine(description = '') {
   const text = (description || '').toLowerCase();
-  
+
   const isMainBurst = text.includes('burst') || text.includes('explosion') || text.includes('gushing') || text.includes('torrent') || text.includes('flooding road') || text.includes('main line');
   const isRoadway = text.includes('road') || text.includes('street') || text.includes('asphalt') || text.includes('tar') || text.includes('sidewalk');
   const isCommercial = text.includes('hotel') || text.includes('shop') || text.includes('commercial') || text.includes('factory');

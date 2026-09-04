@@ -20,7 +20,7 @@ export const submitReport = async (reportData) => {
     if (response.ok) {
       const result = await response.json();
       console.log("Backend response received:", result);
-      
+
       // Save locally as backup cache
       saveToLocalStorage(result.data || reportData);
 
@@ -38,7 +38,7 @@ export const submitReport = async (reportData) => {
   // Client-side fallback mode
   await new Promise((resolve) => setTimeout(resolve, 500));
   const fallbackId = `LEAK-${Date.now().toString().slice(-6)}`;
-  
+
   const createdReport = {
     id: fallbackId,
     reportId: fallbackId,
