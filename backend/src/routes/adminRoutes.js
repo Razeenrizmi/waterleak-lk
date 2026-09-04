@@ -1,7 +1,7 @@
 import express from 'express';
 import Leak from '../models/Leak.js';
+import { protect, authorize } from '../middleware/authMiddleware.js';
 import {
-  requireAdmin,
   getPendingReports,
   approveReport,
   rejectReport,
@@ -13,8 +13,8 @@ import {
 
 const router = express.Router();
 
-// All admin routes require an authenticated admin (see adminController.requireAdmin)
-router.use(requireAdmin);
+// All admin routes require an authenticated NWSDB_ADMIN
+router.use(protect, authorize('NWSDB_ADMIN'));
 
 // Member 4: GET /api/admin/triage - Admin overview & statistics
 router.get('/triage', async (req, res) => {

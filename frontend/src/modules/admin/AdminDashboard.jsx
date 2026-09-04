@@ -17,8 +17,8 @@ export default function AdminDashboard() {
   const [activeSubTab, setActiveSubTab] = useState('overview');
   const currentUser = getCurrentUser();
 
-  // Only role 'admin' can open the admin pages below.
-  if (!currentUser || currentUser.role !== 'admin') {
+  // Only role 'NWSDB_ADMIN' can open the admin pages below.
+  if (!currentUser || currentUser.role !== 'NWSDB_ADMIN') {
     return (
       <div className="p-6 bg-slate-900/80 border border-rose-500/30 rounded-2xl shadow-xl text-center">
         <ShieldAlert className="w-10 h-10 text-rose-400 mx-auto mb-3" />

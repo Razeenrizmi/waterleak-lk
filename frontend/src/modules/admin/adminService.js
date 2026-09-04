@@ -1,19 +1,18 @@
 // Member 4: Admin API service
 //
 // Approve/reject/status/stats/users calls hit /api/admin/* which require an
-// admin JWT (see backend/src/controllers/adminController.js -> requireAdmin).
-// Until a teammate's login flow exists, this reads { token, user } from
-// localStorage under the 'waterleak_auth' key and sends the token as a
-// Bearer header — align the key/shape with the real login once it lands.
+// NWSDB_ADMIN JWT (see backend/src/middleware/authMiddleware.js).
+// AuthContext.jsx stores the login response flat under the 'waterleak_user'
+// localStorage key as { _id, name, email, role, token }.
 //
 // "All Reports" reuses Member 2's existing GET /api/map/leaks endpoint
 // (already returns every leak) instead of duplicating a route.
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'http://localhost:5001/api';
 
 function getAuthHeaders() {
   try {
-    const stored = localStorage.getItem('waterleak_auth');
+    const stored = localStorage.getItem('waterleak_user');
     if (!stored) return {};
     const { token } = JSON.parse(stored);
     return token ? { Authorization: `Bearer ${token}` } : {};
@@ -40,9 +39,9 @@ async function request(url, options = {}) {
 
 export function getCurrentUser() {
   try {
-    const stored = localStorage.getItem('waterleak_auth');
+    const stored = localStorage.getItem('waterleak_user');
     if (!stored) return null;
-    return JSON.parse(stored).user || null;
+    return JSON.parse(stored);
   } catch {
     return null;
   }
