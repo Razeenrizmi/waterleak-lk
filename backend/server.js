@@ -8,11 +8,12 @@ import reportingRoutes from './src/routes/reportingRoutes.js';
 import mapRoutes from './src/routes/mapRoutes.js';
 import aiRoutes from './src/routes/aiRoutes.js';
 import adminRoutes from './src/routes/adminRoutes.js';
+import authRoutes from './src/routes/authRoutes.js';
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Connect to MongoDB
 connectDB();
@@ -35,6 +36,7 @@ app.use('/api/reports', reportingRoutes);  // Member 1
 app.use('/api/map', mapRoutes);            // Member 2
 app.use('/api/ai', aiRoutes);              // Member 3 (AI Leak Analysis)
 app.use('/api/admin', adminRoutes);        // Member 4
+app.use('/api/auth', authRoutes);          // Auth Module
 
 // Start Express Server
 app.listen(PORT, () => {
