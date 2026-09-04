@@ -2,23 +2,6 @@ import Leak from '../models/Leak.js';
 import User from '../models/User.js';
 
 /**
- * Member 4: Admin-only access guard.
- *
- * Assumes an upstream auth middleware (JWT verification) runs before this
- * and populates req.user = { id, role, ... }. Until that auth layer exists,
- * every request has no req.user and will be rejected with 401.
- */
-export const requireAdmin = (req, res, next) => {
-  if (!req.user) {
-    return res.status(401).json({ success: false, message: 'Authentication required' });
-  }
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ success: false, message: 'Admin access required' });
-  }
-  next();
-};
-
-/**
  * @desc Member 4: List reports waiting for admin approval
  * @route GET /api/admin/reports/pending
  */
