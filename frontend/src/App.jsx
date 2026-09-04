@@ -5,12 +5,25 @@ import AiLeakAnalyzer from './modules/ai-analysis/AiLeakAnalyzer';
 import AdminDashboard from './modules/admin/AdminDashboard';
 import mockData from './shared/mockData.json';
 import { API_CONFIG } from './shared/apiConfig';
-import { Droplet, Shield, MapPin, Sparkles, Layers, FileText, CheckCircle } from 'lucide-react';
+import { AuthContext } from './shared/AuthContext';
+import LoginRegister from './modules/auth/LoginRegister';
+import { Droplet, Shield, MapPin, Sparkles, Layers, FileText, CheckCircle, LogOut, User as UserIcon } from 'lucide-react';
 
 export default function App() {
+  const { user, loading, logout } = React.useContext(AuthContext);
+  
   const [activeTab, setActiveTab] = useState('ai-analysis');
   const [leaks, setLeaks] = useState(mockData);
   const [currentAnalysis, setCurrentAnalysis] = useState(null);
+
+  // Set default tab based on user role when user changes
+  React.useEffect(() => {
+    if (user) {
+      if (user.role === 'REPORTER') setActiveTab('reporting');
+      else if (user.role === 'LOCAL_COUNCIL_ADMIN') setActiveTab('admin');
+      else setActiveTab('ai-analysis'); // NWSDB_ADMIN
+    }
+  }, [user]);
 
   // Sample report input state for demoing Member 3
   const [sampleDescription, setSampleDescription] = useState(
@@ -21,6 +34,14 @@ export default function App() {
     console.log("Member 3 AI Analysis completed:", result);
     setCurrentAnalysis(result);
   };
+
+  if (loading) {
+    return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-cyan-400">Loading...</div>;
+  }
+
+  if (!user) {
+    return <LoginRegister />;
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500 selection:text-white flex flex-col">
@@ -42,29 +63,36 @@ export default function App() {
           </div>
 
           {/* Member Navigation Tabs */}
-          <nav className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 text-xs font-semibold">
-            <button
-              onClick={() => setActiveTab('ai-analysis')}
-              className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
-                activeTab === 'ai-analysis'
-                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Sparkles className="w-4 h-4" />
-              Member 3 (AI Module)
-            </button>
-            <button
-              onClick={() => setActiveTab('reporting')}
-              className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
-                activeTab === 'reporting'
-                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <FileText className="w-4 h-4" />
-              Member 1 (Report)
-            </button>
+          <nav className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 text-xs font-semibold overflow-x-auto">
+            
+            {(user.role === 'NWSDB_ADMIN') && (
+              <button
+                onClick={() => setActiveTab('ai-analysis')}
+                className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
+                  activeTab === 'ai-analysis'
+                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Sparkles className="w-4 h-4" />
+                Member 3 (AI Module)
+              </button>
+            )}
+
+            {(user.role === 'REPORTER' || user.role === 'NWSDB_ADMIN') && (
+              <button
+                onClick={() => setActiveTab('reporting')}
+                className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
+                  activeTab === 'reporting'
+                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <FileText className="w-4 h-4" />
+                Report
+              </button>
+            )}
+
             <button
               onClick={() => setActiveTab('map')}
               className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
@@ -74,20 +102,38 @@ export default function App() {
               }`}
             >
               <MapPin className="w-4 h-4" />
-              Member 2 (Map)
+              Map
             </button>
-            <button
-              onClick={() => setActiveTab('admin')}
-              className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
-                activeTab === 'admin'
-                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Shield className="w-4 h-4" />
-              Member 4 (Admin)
-            </button>
+
+            {(user.role === 'NWSDB_ADMIN' || user.role === 'LOCAL_COUNCIL_ADMIN') && (
+              <button
+                onClick={() => setActiveTab('admin')}
+                className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
+                  activeTab === 'admin'
+                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Shield className="w-4 h-4" />
+                Admin
+              </button>
+            )}
           </nav>
+
+          {/* User Profile & Logout */}
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col items-end hidden sm:flex">
+              <span className="text-sm font-bold text-white">{user.name}</span>
+              <span className="text-[10px] text-cyan-400 uppercase tracking-wider">{user.role.replace(/_/g, ' ')}</span>
+            </div>
+            <button 
+              onClick={logout}
+              className="p-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-400 hover:text-red-400 hover:border-red-900/50 hover:bg-red-950/30 transition-all"
+              title="Logout"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </header>
 
