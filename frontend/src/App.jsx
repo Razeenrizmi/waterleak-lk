@@ -22,6 +22,29 @@ export default function App() {
     setCurrentAnalysis(result);
   };
 
+  const handleReportSubmitted = (newReport) => {
+    if (!newReport) return;
+    const formattedLeak = {
+      id: newReport.id || `leak-${Date.now()}`,
+      reporter: newReport.reporter || 'Amara Perera',
+      location: newReport.location || 'Galle Road, Colombo',
+      lat: newReport.lat || 6.8885,
+      lng: newReport.lng || 79.8558,
+      description: newReport.description || '',
+      leakType: newReport.leakType || 'Water Pipe Leak',
+      severityLevel: newReport.severityLevel || 'HIGH',
+      severityScore: newReport.aiAnalysis?.severityScore || 75,
+      estimatedLossPerHourLiters: newReport.aiAnalysis?.estimatedLossPerHourLiters || 850,
+      priorityScore: newReport.aiAnalysis?.priorityScore || 80,
+      recommendedAction: newReport.aiAnalysis?.recommendedAction || 'Dispatch NWSDB inspection crew.',
+      targetAuthority: newReport.aiAnalysis?.targetAuthority || 'NWSDB Quick Response Unit',
+      safetyAdvisory: newReport.aiAnalysis?.safetyAdvisory || 'Caution near leak area.',
+      status: 'PENDING',
+      timestamp: newReport.timestamp || new Date().toISOString()
+    };
+    setLeaks((prev) => [formattedLeak, ...prev]);
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500 selection:text-white flex flex-col">
       {/* Header Bar */}
@@ -44,17 +67,6 @@ export default function App() {
           {/* Member Navigation Tabs */}
           <nav className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 text-xs font-semibold">
             <button
-              onClick={() => setActiveTab('ai-analysis')}
-              className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
-                activeTab === 'ai-analysis'
-                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <Sparkles className="w-4 h-4" />
-              Member 3 (AI Module)
-            </button>
-            <button
               onClick={() => setActiveTab('reporting')}
               className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
                 activeTab === 'reporting'
@@ -64,6 +76,17 @@ export default function App() {
             >
               <FileText className="w-4 h-4" />
               Member 1 (Report)
+            </button>
+            <button
+              onClick={() => setActiveTab('ai-analysis')}
+              className={`px-4 py-2 rounded-xl transition-all flex items-center gap-2 ${
+                activeTab === 'ai-analysis'
+                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+              Member 3 (AI Module)
             </button>
             <button
               onClick={() => setActiveTab('map')}
@@ -98,7 +121,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <Layers className="w-5 h-5 text-cyan-400 shrink-0" />
             <p className="text-xs text-slate-300">
-              <strong className="text-cyan-300">Modular Team Architecture:</strong> Each module is completely isolated inside <code className="text-cyan-400">src/modules/</code>. Member 3's AI Analysis engine works standalone and shares JSON callbacks with Member 1 & Member 4.
+              <strong className="text-cyan-300">Modular Team Architecture:</strong> Each module is completely isolated inside <code className="text-cyan-400">src/modules/</code>. Member 1's Leak Report Form shares live updates with Member 2, Member 3 & Member 4.
             </p>
           </div>
           <div className="text-xs text-slate-400 font-mono">
@@ -107,6 +130,10 @@ export default function App() {
         </div>
 
         {/* Dynamic View based on Active Tab */}
+        {activeTab === 'reporting' && (
+          <ReportingForm onReportSubmitted={handleReportSubmitted} />
+        )}
+
         {activeTab === 'ai-analysis' && (
           <div className="space-y-6">
             <div className="p-6 bg-slate-900/60 border border-slate-800 rounded-3xl space-y-4">
@@ -162,7 +189,6 @@ export default function App() {
           </div>
         )}
 
-        {activeTab === 'reporting' && <ReportingForm />}
         {activeTab === 'map' && <LeakMap leaks={leaks} />}
         {activeTab === 'admin' && <AdminDashboard />}
       </main>
