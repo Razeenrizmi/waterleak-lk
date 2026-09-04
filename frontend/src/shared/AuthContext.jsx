@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const API_BASE = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001/api' : '/api');
+  const API_BASE = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001/api' : 'https://waterleaklk1.vercel.app/api');
 
   const login = async (email, password) => {
     try {

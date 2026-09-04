@@ -38,7 +38,12 @@ app.use('/api/ai', aiRoutes);              // Member 3 (AI Leak Analysis)
 app.use('/api/admin', adminRoutes);        // Member 4
 app.use('/api/auth', authRoutes);          // Auth Module
 
-// Start Express Server
-app.listen(PORT, () => {
-  console.log(`🚀 WaterLeak LK Backend running on http://localhost:${PORT}`);
-});
+// Start Express Server (only in local development, not on Vercel)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 WaterLeak LK Backend running on http://localhost:${PORT}`);
+  });
+}
+
+// Export for Vercel serverless
+export default app;
