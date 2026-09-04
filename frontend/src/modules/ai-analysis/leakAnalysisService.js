@@ -72,7 +72,7 @@ export function runLocalFallbackEngine(description = '') {
  * Tries Node.js Express backend (/api/ai/analyze), falls back to direct Gemini API or Local Engine
  */
 export async function analyzeWaterLeak({ imageFile, imageUrl, description }) {
-  const BACKEND_API = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/ai/analyze` : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001/api/ai/analyze' : '/api/ai/analyze');
+  const BACKEND_API = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/ai/analyze` : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001/api/ai/analyze' : 'https://waterleaklk1.vercel.app/api/ai/analyze');
 
   try {
     const response = await fetch(BACKEND_API, {

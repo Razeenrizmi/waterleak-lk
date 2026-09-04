@@ -8,7 +8,7 @@ export async function analyzeLeak(description, imageUrl = null) {
       saveToDb: false
     };
 
-    const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/ai/analyze` : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001/api/ai/analyze' : '/api/ai/analyze');
+    const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/ai/analyze` : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001/api/ai/analyze' : 'https://waterleaklk1.vercel.app/api/ai/analyze');
 
     // Make a request to our Express backend
     const response = await fetch(API_URL, {
