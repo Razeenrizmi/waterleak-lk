@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema(
       enum: ['REPORTER', 'NWSDB_ADMIN', 'LOCAL_COUNCIL_ADMIN'],
       default: 'REPORTER',
     },
+    blocked: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
