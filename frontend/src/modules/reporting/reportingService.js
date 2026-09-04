@@ -3,7 +3,7 @@
  * Connects to Express Backend (POST /api/reports) with automatic offline fallback.
  */
 
-const BACKEND_REPORTS_API = 'http://localhost:5001/api/reports';
+const BACKEND_REPORTS_API = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/reports` : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001/api/reports' : '/api/reports');
 
 export const submitReport = async (reportData) => {
   console.log("Submitting report to backend:", reportData);

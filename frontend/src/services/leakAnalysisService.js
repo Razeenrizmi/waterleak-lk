@@ -8,8 +8,10 @@ export async function analyzeLeak(description, imageUrl = null) {
       saveToDb: false
     };
 
+    const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/ai/analyze` : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001/api/ai/analyze' : '/api/ai/analyze');
+
     // Make a request to our Express backend
-    const response = await fetch('http://localhost:5001/api/ai/analyze', {
+    const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

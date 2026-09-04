@@ -8,7 +8,7 @@
 // "All Reports" reuses Member 2's existing GET /api/map/leaks endpoint
 // (already returns every leak) instead of duplicating a route.
 
-const API_BASE = 'http://localhost:5001/api';
+const API_BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001/api' : '/api');
 
 function getAuthHeaders() {
   try {
