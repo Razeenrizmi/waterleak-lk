@@ -1,0 +1,38 @@
+[
+  {
+    "id": "leak-001",
+    "reporter": "Amara Perera",
+    "location": "Galle Road, Bambalapitiya, Colombo 04",
+    "lat": 6.8885,
+    "lng": 79.8558,
+    "description": "Main pipeline rupture near bus stand flooding road surface with high pressure stream",
+    "leakType": "Main Pipeline Burst",
+    "severityLevel": "CRITICAL",
+    "severityScore": 92,
+    "estimatedLossPerHourLiters": 3500,
+    "priorityScore": 95,
+    "recommendedAction": "Emergency Isolation & Heavy Machinery Crew Dispatch",
+    "targetAuthority": "NWSDB Quick Response Unit",
+    "safetyAdvisory": "Roadway hazard! Drive slowly due to water accumulation and potential sinkhole.",
+    "status": "DISPATCHED",
+    "timestamp": "2026-09-04T08:30:00Z"
+  },
+  {
+    "id": "leak-002",
+    "reporter": "Kasun Silva",
+    "location": "Kandy Road, Kiribathgoda",
+    "lat": 6.9789,
+    "lng": 79.9275,
+    "description": "Commercial supply pipe leaking steadily under sidewalk, water pooling into drain",
+    "leakType": "Commercial Overflow",
+    "severityLevel": "HIGH",
+    "severityScore": 74,
+    "estimatedLossPerHourLiters": 1200,
+    "priorityScore": 78,
+    "recommendedAction": "Inspect commercial meter coupling and seal underground line",
+    "targetAuthority": "NWSDB Quick Response Unit",
+    "safetyAdvisory": "Slippery footway. Caution for pedestrians.",
+    "status": "PENDING",
+    "timestamp": "2026-09-04T09:10:00Z"
+  }
+]
